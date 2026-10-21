@@ -1,155 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JudgeIt | Register</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fb;
-            color: #172033;
-        }
-
-        header {
-            background: #172554;
-            color: white;
-            padding: 20px 8%;
-        }
-
-        header h2 {
-            margin: 0;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px #0000000d;
-        }
-
-        h1 {
-            margin-top: 0;
-        }
-
-        label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 13px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .error {
-            color: #dc2626;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .link a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-    </style>
-</head>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create account')}"></head>
 <body>
+<header th:replace="~{fragments/layout :: nav('account')}"></header>
+<main id="main" class="page auth-page" tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
 
-<header>
-    <h2>JudgeIt</h2>
-</header>
+    <section class="panel auth-panel"><p class="eyebrow">A PLACE TO PRACTICE</p><h1>Start your next chapter.</h1><p class="muted">Create your JudgeIt account.</p><form th:action="@{/register}" th:object="${user}" method="post"><div class="notice error-notice" th:if="${#fields.hasAnyErrors()}" role="alert">Please correct the fields below to create your account.</div>
+    <label for="name">Name</label><input id="name" th:field="*{name}" autocomplete="name" maxlength="100" required aria-describedby="name-error" th:attr="aria-invalid=${#fields.hasErrors('name')}"><p id="name-error" class="field-error" th:errors="*{name}"></p>
+    <label for="email">Email address</label><input type="email" id="email" th:field="*{email}" autocomplete="email" maxlength="150" required aria-describedby="email-error" th:attr="aria-invalid=${#fields.hasErrors('email')}"><p id="email-error" class="field-error" th:errors="*{email}"></p>
+    <label for="password">Password</label><input type="password" id="password" name="password" minlength="6" maxlength="100" autocomplete="new-password" required aria-describedby="password-hint password-error" th:attr="aria-invalid=${#fields.hasErrors('password')}"><p id="password-hint" class="field-hint">Use between 6 and 100 characters.</p><p id="password-error" class="field-error" th:errors="*{password}"></p><button class="button full" type="submit">Create account →</button></form><p class="auth-switch">Already have an account? <a th:href="@{/login}">Log in</a></p></section>
 
-<div class="container">
-    <div class="card">
-
-        <h1>Create Account</h1>
-        <p>Create your JudgeIt user account.</p>
-
-        <form action="/register" method="post" th:object="${user}">
-
-            <label for="name">Name</label>
-            <input
-                type="text"
-                id="name"
-                th:field="*{name}"
-                placeholder="Enter your name">
-
-            <div class="error"
-                 th:if="${#fields.hasErrors('name')}"
-                 th:errors="*{name}">
-            </div>
-
-            <label for="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                th:field="*{email}"
-                placeholder="Enter your email">
-
-            <div class="error"
-                 th:if="${#fields.hasErrors('email')}"
-                 th:errors="*{email}">
-            </div>
-
-            <label for="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                th:field="*{password}"
-                placeholder="Enter your password">
-
-            <div class="error"
-                 th:if="${#fields.hasErrors('password')}"
-                 th:errors="*{password}">
-            </div>
-
-            <button type="submit">Create Account</button>
-
-        </form>
-
-        <div class="link">
-            Already have an account?
-            <a href="/login">Login</a>
-        </div>
-
-    </div>
-</div>
-
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${pageTitle + ' | JudgeIt'}">JudgeIt</title>
+    <link rel="stylesheet" th:href="@{/css/judgeit.css}">
+    <script defer th:src="@{/js/judgeit.js}"></script>
+</head>
+<body>
+<header th:fragment="nav(active)" class="site-header">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="header-inner">
+        <a class="brand" th:href="@{/}" aria-label="JudgeIt home"><span class="brand-mark" aria-hidden="true">J<span>.</span></span>JudgeIt</a>
+        <nav aria-label="Main navigation">
+            <a th:href="@{/}" th:classappend="${active == 'dashboard'} ? 'active'" th:attr="aria-current=${active == 'dashboard' ? 'page' : null}">Dashboard</a>
+            <a th:href="@{/problems}" th:classappend="${active == 'problems'} ? 'active'" th:attr="aria-current=${active == 'problems' ? 'page' : null}">Problems</a>
+            <a th:href="@{/submissions/new}" th:classappend="${active == 'code'} ? 'active'" th:attr="aria-current=${active == 'code' ? 'page' : null}">Code editor</a>
+            <a th:href="@{/submissions}" th:classappend="${active == 'history'} ? 'active'" th:attr="aria-current=${active == 'history' ? 'page' : null}">Submissions</a>
+        </nav>
+        <div class="account-links">
+            <a th:if="${session.loggedInUser == null}" th:href="@{/login}">Log in</a>
+            <a th:if="${session.loggedInUser == null}" class="button small" th:href="@{/register}">Join JudgeIt <span aria-hidden="true">↗</span></a>
+            <a th:if="${session.loggedInUser != null}" th:href="@{/profile}" th:attr="aria-current=${active == 'profile' ? 'page' : null}">My profile</a>
+            <a th:if="${session.loggedInUser != null}" th:href="@{/logout}">Log out</a>
+        </div>
+    </div>
+</header>
+<div th:fragment="feedback">
+    <div th:if="${successMessage}" class="notice success" role="status" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="notice error-notice" role="alert" th:text="${errorMessage}"></div>
+</div>
+<footer th:fragment="footer" class="site-footer"><div><a class="footer-brand" th:href="@{/}">JudgeIt<span>.</span></a><span>A little practice. A better solution.</span></div><p>Academic coding assessment project</p></footer>
+</body>
+</html>

@@ -1,33 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Submission Result | JudgeIt</title>
-    <style>
-        *{box-sizing:border-box}body{margin:0;padding:30px 16px;font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}
-        .container{max-width:900px;margin:auto}.panel{background:white;border-radius:10px;padding:24px;margin-bottom:18px;box-shadow:0 3px 12px #0000000d}
-        h1,h2{color:#172554;margin-top:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-        .item{background:#f8fafc;padding:14px;border-radius:7px}.label{display:block;color:#64748b;font-size:13px;margin-bottom:6px}
-        .status{display:inline-block;background:#fef3c7;color:#92400e;padding:6px 10px;border-radius:20px;font-weight:bold}
-        .notice{line-height:1.6}.code{white-space:pre-wrap;overflow-wrap:anywhere;background:#0f172a;color:#e2e8f0;padding:18px;border-radius:8px;max-height:500px;overflow:auto;font-family:Consolas,monospace}
-        .button{display:inline-block;margin-right:8px;padding:11px 16px;border-radius:6px;background:#2563eb;color:white;text-decoration:none}
-    </style>
-</head>
-<body><div class="container">
-    <div class="panel">
-        <h1>Submission Result #<span th:text="${submission.id}">1</span></h1>
-        <div class="grid">
-            <div class="item"><span class="label">Problem</span><strong th:text="${submission.problem.title}">Problem title</strong></div>
-            <div class="item"><span class="label">Language</span><strong th:text="${submission.language}">Java</strong></div>
-            <div class="item"><span class="label">Submitted at</span><strong th:text="${#temporals.format(submission.submittedAt, 'yyyy-MM-dd HH:mm:ss')}">Date</strong></div>
-            <div class="item"><span class="label">Verdict</span><span class="status" th:text="${submission.verdict}">PENDING</span></div>
-        </div>
-        <h2 style="margin-top:24px">Evaluation details</h2>
-        <p class="notice" th:text="${submission.resultDetails}">Submission saved.</p>
-        <p class="notice"><strong>Note:</strong> Automated execution, test-case results, and scoring require a secure judge runner and are not implemented by this feature.</p>
-        <a class="button" th:href="@{/submissions}">Submission History</a>
-        <a class="button" th:href="@{/submissions/new(problemId=${submission.problem.id})}">Submit Again</a>
-    </div>
-    <div class="panel"><h2>Submitted Source Code</h2><pre class="code" th:text="${submission.sourceCode}">// source code</pre></div>
-</div></body>
+<head th:replace="~{fragments/layout :: head('Submission result')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('history')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
+
+    <a class="back-link" th:href="@{/submissions}">← Submission history</a><div class="page-heading"><div><p class="eyebrow">YOUR SAVED WORK</p><h1>Submission <span th:text="${'#' + submission.id}">#1</span></h1></div><a class="button" th:href="@{/submissions/new(problemId=${submission.problem.id})}">Try another solution →</a></div>
+    <section class="panel"><div class="result-meta"><div><span class="caption">Problem</span><a class="problem-title" th:href="@{/problems/{id}(id=${submission.problem.id})}" th:text="${submission.problem.title}">Problem</a></div><div><span class="caption">Language</span><strong th:text="${submission.language}">Java</strong></div><div><span class="caption">Submitted</span><strong th:text="${#temporals.format(submission.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</strong></div><div><span class="caption">Verdict</span><span class="badge" th:classappend="${submission.verdict == 'ACCEPTED' ? 'easy' : (submission.verdict == 'PENDING' ? 'medium' : 'hard')}" th:text="${submission.verdict}">PENDING</span></div></div><hr><h2>Evaluation details</h2><p class="prose" th:text="${submission.resultDetails}">Submission saved.</p><p class="notice" th:if="${submission.verdict == 'PENDING'}">Your source code is saved. Automated evaluation requires a connected secure judge runner; no score is available yet.</p></section>
+    <section class="panel source-panel"><div class="section-heading"><h2>Submitted source code</h2><span class="caption" th:text="${submission.language}">Java</span></div><pre class="saved-code" tabindex="0" th:text="${submission.sourceCode}">// Source code</pre></section>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
 </html>

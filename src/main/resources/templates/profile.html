@@ -1,107 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JudgeIt | Profile</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fb;
-            color: #172033;
-        }
-
-        header {
-            background: #172554;
-            color: white;
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h2 {
-            margin: 0;
-        }
-
-        header a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px #0000000d;
-        }
-
-        h1 {
-            margin-top: 0;
-        }
-
-        .info {
-            margin-top: 25px;
-        }
-
-        .info p {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .logout {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 22px;
-            background: #dc2626;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My profile')}"></head>
 <body>
+<header th:replace="~{fragments/layout :: nav('profile')}"></header>
+<main id="main" class="page narrow" tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
 
-<header>
-    <h2>JudgeIt</h2>
-    <a href="/logout">Logout</a>
-</header>
+    <div class="page-heading"><div><p class="eyebrow">YOUR ACCOUNT</p><h1>Welcome, <span th:text="${user.name}">coder</span>.</h1><p class="muted">A good day to take on a new challenge.</p></div></div><section class="panel form-panel"><h2>Profile details</h2><dl class="profile-details"><dt>Name</dt><dd th:text="${user.name}">Name</dd><dt>Email address</dt><dd th:text="${user.email}">Email</dd></dl><div class="actions"><a class="button" th:href="@{/problems}">Find a problem →</a><a class="button secondary" th:href="@{/logout}">Log out</a></div></section>
 
-<div class="container">
-    <div class="card">
-
-        <h1>My Profile</h1>
-        <p>Welcome to your JudgeIt account.</p>
-
-        <div class="info">
-            <p>
-                <strong>Name:</strong>
-                <span th:text="${user.name}"></span>
-            </p>
-
-            <p>
-                <strong>Email:</strong>
-                <span th:text="${user.email}"></span>
-            </p>
-        </div>
-
-        <a class="logout" href="/logout">Logout</a>
-
-    </div>
-</div>
-
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

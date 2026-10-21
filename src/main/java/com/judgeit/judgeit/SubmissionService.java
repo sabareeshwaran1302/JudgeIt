@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class SubmissionService {
@@ -39,6 +41,6 @@ public class SubmissionService {
     @Transactional(readOnly = true)
     public Submission getSubmission(Long id) {
         return submissionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Submission not found: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Submission not found"));
     }
 }

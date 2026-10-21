@@ -33,7 +33,9 @@ public class SubmissionController {
     @GetMapping("/submissions/new")
     public String showSubmitForm(@RequestParam(required = false) Long problemId, Model model) {
         model.addAttribute("problems", problemRepository.findAll());
-        model.addAttribute("form", new SubmissionForm());
+        SubmissionForm form = new SubmissionForm();
+        form.setProblemId(problemId);
+        model.addAttribute("form", form);
         model.addAttribute("selectedProblemId", problemId);
         return "submit-code";
     }

@@ -1,123 +1,40 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JudgeIt | Coding Assessment Platform</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fb;
-            color: #172033;
-        }
-
-        header {
-            background: #172554;
-            color: white;
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h2 {
-            margin: 0;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 90px 20px;
-        }
-
-        .hero h1 {
-            font-size: 46px;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            color: #596579;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 13px 25px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            padding: 20px 8% 70px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            width: 260px;
-            box-shadow: 0 4px 15px #0000000d;
-        }
-
-        .card h3 {
-            color: #1d4ed8;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-        }
-    </style>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
 <body>
-    <header>
-        <h2>JudgeIt</h2>
-        <span>Smart Coding Assessment</span>
-    </header>
+<header th:replace="~{fragments/layout :: nav('dashboard')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
 
-    <section class="hero">
-        <h1>Code. Test. Improve.</h1>
-        <p>
-            A Java-based coding assessment and explainable grading platform.
-            <br>
-            Practice programming, evaluate solutions, and understand your results.
-        </p>
-        <a class="button" href="#features">Explore Features</a>
+    <div class="page-heading"><div><p class="eyebrow">YOUR PRACTICE WORKSPACE</p><h1>Ready for your next challenge?</h1><p class="muted">Explore a problem, write your solution, and keep moving forward.</p></div><span class="workspace-tag">JudgeIt / Overview</span></div>
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy"><span class="pill">ONE PROBLEM AT A TIME</span><h2 id="hero-title">Small steps.<br>Stronger solutions.</h2><p>Build your problem-solving skills with focused coding practice. Your next breakthrough starts here.</p><a class="button light" th:href="@{/problems}">Explore problems <span aria-hidden="true">→</span></a></div>
+        <div class="code-art" aria-label="Illustration of a Java solution"><div class="code-title"><span class="window-dots" aria-hidden="true">● ● ●</span><span>Solution.java</span><span>JAVA</span></div><pre><span class="code-muted">// Start with a little curiosity.</span>
+<span class="code-purple">class</span> <span class="code-yellow">Solution</span> {
+  <span class="code-purple">int</span> solve(<span class="code-purple">int</span>[] numbers) {
+    <span class="code-purple">int</span> answer = <span class="code-yellow">0</span>;
+    <span class="code-purple">for</span> (<span class="code-purple">int</span> n : numbers) {
+      answer += n;
+    }
+    <span class="code-purple">return</span> answer;
+  }
+}</pre><div class="code-bottom"><span class="green-dot"></span>Think. Write. Refine.</div></div>
     </section>
-
-    <section class="features" id="features">
-        <div class="card">
-            <h3>Programming Problems</h3>
-            <p>Explore coding challenges and test your problem-solving skills.</p>
-        </div>
-
-        <div class="card">
-            <h3>Automated Evaluation</h3>
-            <p>Evaluate submitted solutions against defined test cases.</p>
-        </div>
-
-        <div class="card">
-            <h3>Explainable Grading</h3>
-            <p>Understand scores through test results and grading evidence.</p>
-        </div>
+    <section class="stats" aria-label="Shared workspace statistics">
+        <div class="stat"><span class="stat-icon" aria-hidden="true">{ }</span><div><span class="stat-value" th:text="${problemCount}">0</span><span class="stat-label">Practice problems</span></div></div>
+        <div class="stat"><span class="stat-icon" aria-hidden="true">↗</span><div><span class="stat-value" th:text="${submissionCount}">0</span><span class="stat-label">Saved submissions</span></div></div>
+        <div class="stat"><span class="stat-icon" aria-hidden="true">✓</span><div><span class="stat-value" th:text="${acceptedCount}">0</span><span class="stat-label">Accepted submissions</span></div></div>
     </section>
+    <p class="caption stats-note">Counts cover the shared workspace. Submissions stay pending until a secure judge runner is connected.</p>
+    <div class="dashboard-grid">
+        <section class="panel"><div class="section-heading"><div><p class="eyebrow">FIND YOUR NEXT CHALLENGE</p><h2>Fresh from the problem bank</h2></div><a class="text-link" th:href="@{/problems}">View all <span aria-hidden="true">→</span></a></div>
+            <div class="problem-row" th:each="problem : ${recentProblems}"><span class="problem-symbol" aria-hidden="true">&lt;/&gt;</span><div class="grow"><a class="problem-title" th:href="@{/problems/{id}(id=${problem.id})}" th:text="${problem.title}">Problem</a><p class="caption" th:text="${'Problem #' + problem.id}">Problem ID</p></div><span class="badge" th:classappend="${problem.difficulty == 'Easy' ? 'easy' : (problem.difficulty == 'Hard' ? 'hard' : 'medium')}" th:text="${problem.difficulty}">Easy</span><a class="round-link" th:href="@{/problems/{id}(id=${problem.id})}" th:attr="aria-label=${'Open ' + problem.title}">↗</a></div>
+            <div class="empty-state" th:if="${#lists.isEmpty(recentProblems)}"><h3>A fresh start</h3><p>Add the first challenge to your problem bank.</p><a class="button" th:href="@{/problems/new}">Add a problem</a></div>
+        </section>
+        <aside class="panel steps"><p class="eyebrow">MAKE IT A HABIT</p><h2>Your next three steps</h2><ol><li><span>01</span><div><a th:href="@{/problems}">Pick a problem</a><p>Start with a challenge that fits your level.</p></div></li><li><span>02</span><div><a th:href="@{/submissions/new}">Write your solution</a><p>Choose a language and work through your idea.</p></div></li><li><span>03</span><div><a th:href="@{/submissions}">Revisit your work</a><p>Find saved code and its evaluation status.</p></div></li></ol></aside>
+    </div>
 
-    <footer>
-        JudgeIt — Academic Coding Assessment Project
-    </footer>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

@@ -1,49 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Submit Code | JudgeIt</title>
-    <style>
-        *{box-sizing:border-box}body{margin:0;padding:30px 16px;font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}
-        .container{max-width:900px;margin:auto}.panel{background:white;padding:24px;border-radius:12px;box-shadow:0 3px 12px #0000000d}
-        h1{color:#172554;margin-top:0}label{display:block;font-weight:600;margin:18px 0 8px}
-        select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:6px;font:inherit}
-        textarea{min-height:300px;font-family:Consolas,monospace;resize:vertical}
-        .button{display:inline-block;border:0;border-radius:6px;padding:12px 18px;background:#2563eb;color:white;text-decoration:none;cursor:pointer;font-size:15px}
-        .secondary{background:#64748b}.error{color:#b91c1c;font-size:14px}.notice{background:#eff6ff;padding:12px;border-radius:6px;line-height:1.5}
-        .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-    </style>
-</head>
+<head th:replace="~{fragments/layout :: head('Code editor')}"></head>
 <body>
-<div class="container">
-    <div class="panel">
-        <h1>Submit Code</h1>
-        <p class="notice">This version stores your submission and records its status as <strong>PENDING</strong>. It does not run untrusted code or calculate an automated score yet.</p>
-        <form th:action="@{/submissions}" th:object="${form}" method="post">
-            <label for="problemId">Problem</label>
-            <select id="problemId" th:field="*{problemId}" required>
-                <option value="">-- Select a problem --</option>
-                <option th:each="problem : ${problems}" th:value="${problem.id}" th:text="${problem.title}"
-                        th:selected="${selectedProblemId != null and selectedProblemId == problem.id}">Sample problem</option>
-            </select>
-            <div class="error" th:if="${#fields.hasErrors('problemId')}" th:errors="*{problemId}"></div>
-            <label for="language">Programming language</label>
-            <select id="language" th:field="*{language}" required>
-                <option value="Java">Java</option><option value="Python">Python</option><option value="C">C</option>
-                <option value="C++">C++</option><option value="JavaScript">JavaScript</option>
-            </select>
-            <div class="error" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
-            <label for="sourceCode">Source code</label>
-            <textarea id="sourceCode" th:field="*{sourceCode}" placeholder="Write or paste your solution here..." required></textarea>
-            <div class="error" th:if="${#fields.hasErrors('sourceCode')}" th:errors="*{sourceCode}"></div>
-            <div class="actions">
-                <button class="button" type="submit">Save Submission</button>
-                <a class="button secondary" th:href="@{/problems}">Back to Problems</a>
-                <a class="button secondary" th:href="@{/submissions}">Submission History</a>
-            </div>
-        </form>
-    </div>
-</div>
+<header th:replace="~{fragments/layout :: nav('code')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
+
+    <div class="page-heading"><div><p class="eyebrow">FROM IDEA TO SOLUTION</p><h1>Make it work. Make it yours.</h1><p class="muted">Choose a problem and write or paste your solution below.</p></div><a class="text-link" th:href="@{/submissions}">View submissions →</a></div>
+    <div class="notice">Submissions are saved as <strong>PENDING</strong>. Automated evaluation will be available when a secure judge runner is connected.</div>
+    <div th:if="${#lists.isEmpty(problems)}" class="panel empty-state"><h2>Add a challenge first.</h2><p>A submission needs a problem to solve.</p><a class="button" th:href="@{/problems/new}">Add a problem</a></div>
+    <section class="panel editor-panel" th:unless="${#lists.isEmpty(problems)}"><form th:action="@{/submissions}" th:object="${form}" method="post">
+        <div class="notice error-notice" role="alert" th:if="${#fields.hasAnyErrors()}">Your code has been kept. Correct the fields below and try again.</div>
+        <div class="editor-settings"><div class="grow"><label for="problemId">Problem</label><select id="problemId" th:field="*{problemId}" required aria-describedby="problemId-error" th:attr="aria-invalid=${#fields.hasErrors('problemId')}"><option value="">Select a problem</option><option th:each="problem : ${problems}" th:value="${problem.id}" th:text="${problem.title}">Problem</option></select><p id="problemId-error" class="field-error" th:errors="*{problemId}"></p></div><div><label for="language">Language</label><select id="language" th:field="*{language}" required aria-describedby="language-error"><option value="Java">Java</option><option value="Python">Python</option><option value="C">C</option><option value="C++">C++</option><option value="JavaScript">JavaScript</option></select><p id="language-error" class="field-error" th:errors="*{language}"></p></div></div>
+        <div class="editor-toolbar"><label for="sourceCode">Your solution</label><span class="caption">Plain text editor · up to 20,000 characters</span></div><textarea class="code-editor" id="sourceCode" th:field="*{sourceCode}" spellcheck="false" autocapitalize="off" autocomplete="off" maxlength="20000" required placeholder="// Write or paste your solution here…" aria-describedby="sourceCode-error" th:attr="aria-invalid=${#fields.hasErrors('sourceCode')}"></textarea><p id="sourceCode-error" class="field-error" th:errors="*{sourceCode}"></p>
+        <div class="editor-footer"><p class="caption" data-code-count aria-live="polite">Your code stays editable until you submit.</p><div class="actions"><a class="button secondary" th:href="@{/problems}">Browse problems</a><button class="button" type="submit">Save submission <span aria-hidden="true">↗</span></button></div></div>
+    </form></section>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

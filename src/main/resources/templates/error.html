@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Something went wrong')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('none')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
+
+    <section class="panel empty-state"><p class="eyebrow" th:text="${'ERROR / ' + status}">ERROR</p><h1 th:text="${status == 404 ? 'This page could not be found.' : 'We could not complete that request.'}">Something went wrong.</h1><p class="muted">Return to the dashboard or choose a problem to continue.</p><div class="actions centered"><a class="button" th:href="@{/}">Go to dashboard</a><a class="button secondary" th:href="@{/problems}">Browse problems</a></div></section>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

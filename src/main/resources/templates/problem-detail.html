@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Problem details')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('problems')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
+
+    <a class="back-link" th:href="@{/problems}">← All problems</a>
+    <div class="page-heading"><div><p class="eyebrow" th:text="${'PROBLEM / ' + problem.id}">PROBLEM</p><h1 th:text="${problem.title}">Problem title</h1></div><span class="badge" th:classappend="${problem.difficulty == 'Easy' ? 'easy' : (problem.difficulty == 'Hard' ? 'hard' : 'medium')}" th:text="${problem.difficulty}">Easy</span></div>
+    <div class="detail-grid"><article class="panel"><h2>Problem statement</h2><div class="prose" th:text="${problem.description}">Problem description</div></article><aside class="panel"><p class="eyebrow">PUT YOUR IDEA INTO CODE</p><h2>Ready to give it a go?</h2><p class="muted">Choose your language and save a solution for this problem.</p><a class="button full" th:href="@{/submissions/new(problemId=${problem.id})}">Solve this problem →</a><hr><h3>Manage problem</h3><div class="actions"><a class="button secondary small" th:href="@{/problems/edit/{id}(id=${problem.id})}">Edit problem</a><form th:action="@{/problems/delete/{id}(id=${problem.id})}" method="post" data-confirm="Delete this problem? This action cannot be undone."><button class="button danger small" type="submit">Delete</button></form></div><p class="caption">Problems linked to submissions or test cases must be kept for reference.</p></aside></div>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

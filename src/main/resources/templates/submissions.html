@@ -1,38 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Submission History | JudgeIt</title>
-    <style>
-        *{box-sizing:border-box}body{margin:0;padding:30px 16px;font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937}
-        .container{max-width:1100px;margin:auto}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-        h1{margin:0;color:#172554}.button{display:inline-block;padding:11px 16px;border-radius:6px;background:#2563eb;color:white;text-decoration:none}
-        .panel{background:white;border-radius:10px;padding:18px;box-shadow:0 3px 12px #0000000d;overflow-x:auto}
-        table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:13px;border-bottom:1px solid #e5e7eb}
-        th{background:#f8fafc;color:#334155}.status{display:inline-block;background:#fef3c7;color:#92400e;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
-        .view{color:#1d4ed8;font-weight:bold}.empty{padding:22px;background:white;border-radius:8px}
-    </style>
-</head>
+<head th:replace="~{fragments/layout :: head('Submission history')}"></head>
 <body>
-<div class="container">
-    <div class="header"><h1>Submission History</h1><div>
-        <a class="button" th:href="@{/submissions/new}">+ Submit Code</a>
-        <a class="button" th:href="@{/problems}">Problems</a>
-    </div></div>
-    <div class="panel" th:if="${!#lists.isEmpty(submissions)}">
-        <table><thead><tr><th>ID</th><th>Problem</th><th>Language</th><th>Submitted At</th><th>Verdict</th><th>Result</th></tr></thead>
-        <tbody><tr th:each="submission : ${submissions}">
-            <td th:text="${submission.id}">1</td><td th:text="${submission.problem.title}">Problem title</td>
-            <td th:text="${submission.language}">Java</td>
-            <td th:text="${#temporals.format(submission.submittedAt, 'yyyy-MM-dd HH:mm')}">Date</td>
-            <td><span class="status" th:text="${submission.verdict}">PENDING</span></td>
-            <td><a class="view" th:href="@{/submissions/{id}(id=${submission.id})}">View result</a></td>
-        </tr></tbody></table>
-    </div>
-    <div class="empty" th:if="${#lists.isEmpty(submissions)}">
-        <h2>No submissions yet</h2><p>Choose a problem and submit your first solution to see it here.</p>
-        <a class="button" th:href="@{/submissions/new}">Submit Code</a>
-    </div>
-</div>
+<header th:replace="~{fragments/layout :: nav('history')}"></header>
+<main id="main" class="page " tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
+
+    <div class="page-heading"><div><p class="eyebrow">THE WORK BEHIND THE PROGRESS</p><h1>Every attempt counts.</h1><p class="muted">Browse saved submissions and their latest evaluation status.</p></div><a class="button" th:href="@{/submissions/new}">+ New submission</a></div>
+    <p class="notice">This is the shared workspace history. Personal submission filtering is not available yet.</p>
+    <section class="panel table-panel" th:unless="${#lists.isEmpty(submissions)}"><div class="table-scroll" tabindex="0" role="region" aria-label="Submission history; scroll horizontally on small screens"><table><caption class="sr-only">Saved submissions, newest first</caption><thead><tr><th scope="col">Submission</th><th scope="col">Problem</th><th scope="col">Language</th><th scope="col">Submitted</th><th scope="col">Verdict</th><th scope="col">Details</th></tr></thead><tbody><tr th:each="submission : ${submissions}"><td th:text="${'#' + submission.id}">#1</td><td><a class="problem-title" th:href="@{/problems/{id}(id=${submission.problem.id})}" th:text="${submission.problem.title}">Problem</a></td><td th:text="${submission.language}">Java</td><td class="date" th:text="${#temporals.format(submission.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</td><td><span class="badge" th:classappend="${submission.verdict == 'ACCEPTED' ? 'easy' : (submission.verdict == 'PENDING' ? 'medium' : 'hard')}" th:text="${submission.verdict}">PENDING</span></td><td><a class="text-link" th:href="@{/submissions/{id}(id=${submission.id})}" th:attr="aria-label=${'View submission ' + submission.id}">View result ↗</a></td></tr></tbody></table></div></section>
+    <div class="panel empty-state" th:if="${#lists.isEmpty(submissions)}"><span class="empty-icon" aria-hidden="true">&lt;/&gt;</span><h2>Your first attempt starts here.</h2><p>Pick a challenge and save a solution. You can revisit it any time.</p><a class="button" th:href="@{/problems}">Explore problems →</a></div>
+
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

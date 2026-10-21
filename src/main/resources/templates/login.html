@@ -1,136 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JudgeIt | Login</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6fb;
-            color: #172033;
-        }
-
-        header {
-            background: #172554;
-            color: white;
-            padding: 20px 8%;
-        }
-
-        header h2 {
-            margin: 0;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px #0000000d;
-        }
-
-        h1 {
-            margin-top: 0;
-        }
-
-        label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 13px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .error {
-            color: #dc2626;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .link a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-    </style>
-</head>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Log in')}"></head>
 <body>
+<header th:replace="~{fragments/layout :: nav('account')}"></header>
+<main id="main" class="page auth-page" tabindex="-1">
+    <div th:replace="~{fragments/layout :: feedback}"></div>
 
-<header>
-    <h2>JudgeIt</h2>
-</header>
+    <section class="panel auth-panel"><p class="eyebrow">WELCOME BACK</p><h1>Keep the ideas coming.</h1><p class="muted">Log in to your JudgeIt account.</p><div class="notice error-notice" th:if="${loginError}" th:text="${loginError}" role="alert"></div>
+    <form th:action="@{/login}" th:object="${user}" method="post"><label for="email">Email address</label><input type="email" id="email" th:field="*{email}" autocomplete="username" maxlength="150" required><label for="password">Password</label><input type="password" id="password" name="password" autocomplete="current-password" required><button class="button full" type="submit">Log in →</button></form><p class="auth-switch">New here? <a th:href="@{/register}">Create an account</a></p></section>
 
-<div class="container">
-    <div class="card">
-
-        <h1>Login</h1>
-        <p>Login to your JudgeIt account.</p>
-
-        <div class="error" th:if="${loginError}" th:text="${loginError}">
-        </div>
-
-        <form action="/login" method="post" th:object="${user}">
-
-            <label for="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                th:field="*{email}"
-                placeholder="Enter your email">
-
-            <label for="password">Password</label>
-            <input
-                type="password"
-                id="password"
-                th:field="*{password}"
-                placeholder="Enter your password">
-
-            <button type="submit">Login</button>
-
-        </form>
-
-        <div class="link">
-            Don't have an account?
-            <a href="/register">Create Account</a>
-        </div>
-
-    </div>
-</div>
-
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>

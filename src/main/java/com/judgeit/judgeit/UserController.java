@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -38,7 +39,7 @@ public class UserController {
     public String registerUser(
             @Valid @ModelAttribute("user") User user,
             BindingResult result,
-            Model model) {
+            Model model, RedirectAttributes redirectAttributes) {
 
         if (userRepository.existsByEmail(user.getEmail())) {
             result.rejectValue(
@@ -54,6 +55,7 @@ public class UserController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        redirectAttributes.addFlashAttribute("successMessage", "Account created. You can now log in.");
 
         return "redirect:/login";
     }
