@@ -3,6 +3,7 @@ package com.judgeit.judgeit;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,7 @@ public class SubmissionController {
         private Long problemId;
 
         @NotBlank(message = "Please select a language.")
+        @Pattern(regexp = "Java|Python|C|C\\+\\+|JavaScript", message = "Please select a supported language.")
         @Size(max = 40)
         private String language = "Java";
 
