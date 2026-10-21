@@ -13,10 +13,23 @@
         <div class="notice error-notice" role="alert" th:if="${#fields.hasAnyErrors()}">Your code has been kept. Correct the fields below and try again.</div>
         <div class="editor-settings"><div class="grow"><label for="problemId">Problem</label><select id="problemId" th:field="*{problemId}" required aria-describedby="problemId-error" th:attr="aria-invalid=${#fields.hasErrors('problemId')}"><option value="">Select a problem</option><option th:each="problem : ${problems}" th:value="${problem.id}" th:text="${problem.title}">Problem</option></select><p id="problemId-error" class="field-error" th:errors="*{problemId}"></p></div><div><label for="language">Language</label><select id="language" th:field="*{language}" required aria-describedby="language-error"><option value="Java">Java</option><option value="Python">Python</option><option value="C">C</option><option value="C++">C++</option><option value="JavaScript">JavaScript</option></select><p id="language-error" class="field-error" th:errors="*{language}"></p></div></div>
         <div class="editor-toolbar"><label for="sourceCode">Your solution</label><span class="caption">Plain text editor · up to 20,000 characters</span></div><textarea class="code-editor" id="sourceCode" th:field="*{sourceCode}" spellcheck="false" autocapitalize="off" autocomplete="off" maxlength="20000" required placeholder="// Write or paste your solution here…" aria-describedby="sourceCode-error" th:attr="aria-invalid=${#fields.hasErrors('sourceCode')}"></textarea><p id="sourceCode-error" class="field-error" th:errors="*{sourceCode}"></p>
-        <div class="editor-footer"><p class="caption" data-code-count aria-live="polite">Your code stays editable until you submit.</p><div class="actions"><a class="button secondary" th:href="@{/problems}">Browse problems</a><button class="button" type="submit">Save submission <span aria-hidden="true">↗</span></button></div></div>
+        <div class="editor-footer"><p class="caption" data-code-count aria-live="polite">0 / 20,000 characters</p><div class="actions"><a class="button secondary" th:href="@{/problems}">Browse problems</a><button class="button" type="submit">Save submission <span aria-hidden="true">↗</span></button></div></div>
     </form></section>
 
 </main>
+<script>
+    (() => {
+        const editor = document.getElementById('sourceCode');
+        const counter = document.querySelector('[data-code-count]');
+        if (!editor || !counter) return;
+        const maxLength = Number(editor.getAttribute('maxlength')) || 20000;
+        const updateCount = () => {
+            counter.textContent = editor.value.length.toLocaleString() + ' / ' + maxLength.toLocaleString() + ' characters';
+        };
+        editor.addEventListener('input', updateCount);
+        updateCount();
+    })();
+</script>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
 </html>
